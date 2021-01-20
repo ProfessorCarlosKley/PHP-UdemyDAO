@@ -5,14 +5,14 @@ class sql extends PDO{
 	//Herda de PDO.
 	private $conn;
 
-	public functon __construct(){
+	public function __construct(){
 	
 	$this -> conn = new PDO("mysql:host=localhost;dbname=udemydbphp7", "root", "");
 }
 
 	//Prepara um parâmetro apenas recebido pelo foreach da função abaixo.
 	private function setParam($statment, $key, $value){
-		$statment->bindParam($key, $value)
+		$statment->bindParam($key, $value);
 	}
 
 
@@ -39,7 +39,7 @@ class sql extends PDO{
 
 	public function select($rawQuery, $params = array()):array{
 		$stmt = $this -> query($rawQuery, $params);
-		result $stmt -> fetchAll(PDO::FETCH_ASSOC);
+		return $stmt -> fetchAll(PDO::FETCH_ASSOC);
 		//fatchAll Exemplo01 da pasta PDO.
 	}
 }
