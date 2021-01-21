@@ -37,7 +37,22 @@ Class Usuario{
 		$this -> dtcadastro = $value;
 	}
 
-	public function loadById($id){
+	public static function getlist(){
+	//método estático pode ser usado sem instanciar
+		/*É importante que os métodos estáticos não fiquem amarrados na classe.
+		Por exemplo, usar $this para setar um atributo da classe ou get e set.
+		- Como boas práticas, é bom que estáticos sejam livres de amarrações.
+		*/
+		$sql = new Sql();
+		return $sql -> select("SELECT * FROM tb_usuarios ORDER BY deslogin;");
+	}
+
+	public static function search($login){
+		$sql = new Sql();
+		return $sql -> select("SELECT * FROM tb_usuarios WHERE deslogin LIKE :SEARCH ORDER BY deslogin", array(':SEARCH'=> "%".$login."%"));
+	}
+
+	public function loadById($id){//Carregar pelo ID.
 		$sql = new Sql();
 
 		//select definida na classe Sql.
@@ -55,7 +70,7 @@ Class Usuario{
 			$this -> setDesloin($row['deslogin']);
 			$this -> setDessenha($row['dessenha']);
 			$this -> setDtcadastro(new DateTime($row['dtcadastro']));
-			//DateTime retorna no formato dd-MM-yy, no banco yy-MM-dd
+			
 		}
 	}
 	public function __toString(){
@@ -65,7 +80,7 @@ Class Usuario{
 			"Senha:" => $this -> getDessenha(),
 			"Data do Cadastro:" => $this -> getDtcadastro()->format("d/m/Y H:i:s")
 		));
-	}
+			}
 
 /***********************************************************************
   __toString: Exemplo, Exemplo05-SerializacaoDeObjetos.php da pasta Classes.
@@ -73,6 +88,33 @@ Class Usuario{
   - Permite darmos um echo diretamente no objeto, sem a necessidade de gets.
   - Ao chamarmos o objeto direatmente com echo, mesmo não tendo métodos para leitura, cairemos nesse (como se fosse um padrão).
 *************************************************************************/
-}
+	public function login($login, $password){//Autenticando Login
+
+		$sql = new Sql();
+
+		$results = $sql -> select("SELECT * FROM tb_usuarios WHERE deslogin = :LOGIN AND dessenha = :PASSWORD", array(":LOGIN"=>$login,
+		":PASSWORD" => $password
+	));
+
+		//Verificando se SELECT retornou algo. Lembrando que o retorno é um Array.
+		if(isset($results[0])){
+			//poderia verificar assim:
+			//if(count($results)>0)
+
+			$row = $results[0];
+		//As chaves do array são os nomes dos campos do banco retornados da consulta. Ver o retorno do index.php para melhor entendimento.
+
+			$this -> setIdusuario($row['idusuario']);
+			$this -> setDesloin($row['deslogin']);
+			$this -> setDessenha($row['dessenha']);
+			$this -> setDtcadastro(new DateTime($row['dtcadastro']));
+
+		} else {
+			throw new Exception("Login e/ou senha inválido.");
+		}
+
+		}
+
+	}
 
  ?>
