@@ -30,5 +30,28 @@ $usr = new Usuario();
 $usr -> login("root", "58958900");
 echo $usr;
 
+echo "<br><br> NOVO USUÁRIO COM A CLASSE insert de Usuario.php<br><br>";
+
+/*MÉTODO INSERIR, Comentado para nã encher o banco ***********************
+$inserir = new Usuario("php7", "%$!@#");
+//$inserir -> setDeslogin("php");
+//$inserir -> setDessenha("7000");
+//set's agora alimentados pelo constructor
+
+$inserir -> insert();
+//Após inserir chama o último ID e lista. Conform linha 124 da classe usuario.php
+//$this -> setData($results[0]);
+//setData um método para listagem do array retornado. Retorno [0] sem laço pois só temos um retorno de registro.
+echo $inserir;
+****************************************************************************/
+echo "<br><br> ATUALIZANDO USUÁRIO COM A CLASSE update de Usuario.php<br><br>";
+
+$atualizar = new Usuario();
+
+$atualizar -> loadById(1);
+
+$atualizar -> update("root", "root589589");
+
+echo $atualizar;
 
 ?>
