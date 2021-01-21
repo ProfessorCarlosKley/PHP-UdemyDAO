@@ -18,6 +18,7 @@ Class Usuario{
 		return $this -> deslogin;
 	}
 
+	public function setDeslogin($value){
 		$this -> deslogin = $value;
 	}
 
